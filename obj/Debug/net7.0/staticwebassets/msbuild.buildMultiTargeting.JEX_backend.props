@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\JEX_backend.props" />
+</Project>
