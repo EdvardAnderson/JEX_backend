@@ -19,6 +19,9 @@ public class Startup
         {
             options.UseSqlServer(Configuration.GetConnectionString("JEXDbContext"));
         });
+
+        
+        services.AddScoped<ICompanyService, CompanyService>();
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
