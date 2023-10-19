@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace JEX_backend.Migrations
 {
     [DbContext(typeof(JEXDbContext))]
-    partial class JEXDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231019163620_UpdateGuidId")]
+    partial class UpdateGuidId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -46,7 +49,7 @@ namespace JEX_backend.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasDefaultValueSql("NEWID()");
 
-                    b.Property<Guid>("CompanyId")
+                    b.Property<Guid?>("CompanyId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
@@ -67,13 +70,9 @@ namespace JEX_backend.Migrations
 
             modelBuilder.Entity("JobOpening", b =>
                 {
-                    b.HasOne("JEX_backend.Models.Company", "Company")
+                    b.HasOne("JEX_backend.Models.Company", null)
                         .WithMany("JobOpenings")
-                        .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Company");
+                        .HasForeignKey("CompanyId");
                 });
 
             modelBuilder.Entity("JEX_backend.Models.Company", b =>

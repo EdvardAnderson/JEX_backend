@@ -62,25 +62,34 @@ namespace JEX_backend.Controllers
         [HttpGet]
         public async Task<ActionResult<List<Company>>> GetCompaniesAsync()
         {
-            //var companies = await _companyService.GetCompaniesAsync();
-            return Companies; //todo have them return from db
+            var companies = await _companyService.GetCompaniesAsync();
+            
+            return companies; //todo have them return from db
         }
 
         [HttpGet("{id}")]
         public async Task<Company> GetCompany(Guid id)
         {
             //var company = await _companyService.GetCompanyAsync(id);
-            return Companies.FirstOrDefault(x=>x.Id == id);
+            return Companies.FirstOrDefault(x => x.Id == id);
         }
 
         [HttpPost]
-        public async Task CreateCompany([FromBody]Company company)
+        public async Task CreateCompany([FromBody] Company company)
         {
+            if (string.IsNullOrWhiteSpace(company.Name) || string.IsNullOrWhiteSpace(company.Address))
+            {
+                return;
+            }
+
             await _companyService.CreateCompanyAsync(company);
         }
 
-        
-
-
+        [HttpPost]
+        [Route("jobs")]
+        public async Task CreateJobOpening([FromBody] JobOpening jobOpening)
+        {
+            await _companyService.CreateJobOpeningAsync(jobOpening);
+        }
     }
 }

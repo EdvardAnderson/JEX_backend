@@ -5,5 +5,11 @@ public interface ICompanyService
 
     Task<Company> GetCompanyAsync(Guid id);
 
-    Task CreateCompanyAsync(Company company);
+    Task<Company> CreateCompanyAsync(Company company);
+
+    Task<Company> UpdateAsync(Guid id, Company company);
+
+    Task<bool> DeleteAsync(Guid id);
+
+    Task<JobOpening> CreateJobOpeningAsync(JobOpening jobOpening);
 }
