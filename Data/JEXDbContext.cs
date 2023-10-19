@@ -8,11 +8,6 @@ using JEX_backend.Models;
         {
         }
 
-        public DbSet<Company> Company { get; set; } = default!;
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        optionsBuilder.UseSqlServer();
-        
-    }
+        public DbSet<Company> Companies { get; set; } = default!;
+        public DbSet<JobOpening> JobOpenings { get; set; } = default!;
 }
