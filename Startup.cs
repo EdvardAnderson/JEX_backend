@@ -22,6 +22,16 @@ public class Startup
 
         
         services.AddScoped<ICompanyService, CompanyService>();
+
+         services.AddCors(options =>
+    {
+        options.AddDefaultPolicy(builder =>
+        {
+            builder.WithOrigins("http://localhost:4200") // Angular endpoint allowed
+                   .AllowAnyHeader()
+                   .AllowAnyMethod();
+        });
+    });
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -39,7 +49,7 @@ public class Startup
 
         app.UseHttpsRedirection();
         // Other middleware configuration...
-        
+        app.UseCors();
         app.UseRouting();
         app.UseAuthorization();
         app.UseEndpoints(ep =>
