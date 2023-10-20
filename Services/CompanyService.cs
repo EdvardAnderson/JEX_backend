@@ -11,7 +11,21 @@ public class CompanyService : ICompanyService
 
     public async Task<List<Company>> GetCompaniesAsync()
     {
-        return await _context.Companies.ToListAsync();
+        var jobOpenings = await _context.JobOpenings.ToListAsync();
+        var companies = await _context.Companies.ToListAsync();
+        var companiesWithJobOpenings = companies.GroupJoin(
+            jobOpenings,
+            company => company.Id, // The company's Id property
+            jobOpening => jobOpening.CompanyId, // The foreign key relationship
+            (company, openings) => new Company
+            {
+                Id = company.Id,
+                Name = company.Name,
+                JobOpenings = openings.ToList()
+            }
+        ).Where(company => company.JobOpenings.Any());
+
+        return await Task.FromResult(companiesWithJobOpenings.ToList());
     }
 
     public async Task<Company> GetCompanyAsync(Guid id)
