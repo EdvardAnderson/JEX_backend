@@ -18,7 +18,7 @@ public class Program
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseKestrel()
-                        .UseUrls("https://localhost:7066")
+                        .UseUrls("https://localhost:7066/")
                         .UseStartup<Startup>();
                 });
     }

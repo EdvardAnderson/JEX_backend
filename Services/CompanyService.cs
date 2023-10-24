@@ -6,30 +6,37 @@ public class CompanyService : ICompanyService
 
     public CompanyService(JEXDbContext context)
     {
-        _context = context;
+        _context = context ?? throw new ArgumentNullException(nameof(context));
     }
 
-    public async Task<List<Company>> GetCompaniesAsync()
+    public async Task<List<Company>> GetCompaniesWithJobopeningsAsync()
     {
         var jobOpenings = await _context.JobOpenings.ToListAsync();
         var companies = await _context.Companies.ToListAsync();
         var companiesWithJobOpenings = companies.GroupJoin(
-            jobOpenings,
-            company => company.Id, // The company's Id property
-            jobOpening => jobOpening.CompanyId, // The foreign key relationship
+            jobOpenings.Where(job=>job.IsActive), //only active jobs
+            company => company.Id, 
+            jobOpening => jobOpening.CompanyId, // FK
             (company, openings) => new Company
             {
                 Id = company.Id,
                 Name = company.Name,
                 JobOpenings = openings.ToList()
             }
-        ).Where(company => company.JobOpenings.Any());
-
+        ).Where(company=>company.JobOpenings.Any());
+       
         return await Task.FromResult(companiesWithJobOpenings.ToList());
     }
 
+    public async Task<List<Company>> GetCompaniesAsync()
+    {
+        return await _context.Companies.ToListAsync();
+    }
+
+
     public async Task<Company> GetCompanyAsync(Guid id)
     {
+
         return await _context.Companies.FirstOrDefaultAsync(x => x.Id == id);
     }
 

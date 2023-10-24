@@ -1,5 +1,6 @@
 using JEX_backend.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 
 namespace JEX_backend.Controllers
 {
@@ -10,48 +11,6 @@ namespace JEX_backend.Controllers
     {
         private readonly JEXDbContext _context;
         private readonly ICompanyService _companyService;
-        private static Guid Guid1 = Guid.NewGuid();
-        private static Guid Guid2 = Guid.NewGuid();
-        private List<Company> Companies = new List<Company>{
-            new Company{
-                Id = Guid1,
-                Name = "JEX",
-                Address = "Nassaukade 162",
-                JobOpenings = new List<JobOpening>{
-                    new JobOpening{
-                        Id = Guid.NewGuid(),
-                        Title = "Fullstack ontwikkelaar",
-                        Description = "Fullstack lorem ipsum",
-                        IsActive = true
-                    },
-                     new JobOpening{
-                        Id = Guid.NewGuid(),
-                        Title = "Backend ontwikkelaar",
-                        Description = "Backend lorem ipsum",
-                        IsActive = false
-                    }
-                }
-            },
-             new Company{
-                Id = Guid2,
-                Name = "JEX2",
-                Address = "Nassaukade 162",
-                JobOpenings = new List<JobOpening>{
-                    new JobOpening{
-                        Id = Guid.NewGuid(),
-                        Title = "Fullstack ontwikkelaar2",
-                        Description = "Fullstack lorem ipsum",
-                        IsActive = true
-                    },
-                     new JobOpening{
-                        Id = Guid.NewGuid(),
-                        Title = "Backend ontwikkelaar2",
-                        Description = "Backend lorem ipsum",
-                        IsActive = false
-                    }
-                }
-            }
-        };
 
         public CompanyController(JEXDbContext context, ICompanyService companyService)
         {
@@ -59,19 +18,28 @@ namespace JEX_backend.Controllers
             _companyService = companyService;
         }
 
+        [HttpGet("jobs")]
+        public async Task<ActionResult<List<Company>>> GetCompaniesWithhJobOpeningsAsync()
+        {
+            return await _companyService.GetCompaniesWithJobopeningsAsync();
+        }
+
         [HttpGet]
         public async Task<ActionResult<List<Company>>> GetCompaniesAsync()
         {
-            var companies = await _companyService.GetCompaniesAsync();
-            
-            return companies; //todo have them return from db
+            return await _companyService.GetCompaniesAsync();
         }
 
         [HttpGet("{id}")]
         public async Task<Company> GetCompany(Guid id)
         {
-            //var company = await _companyService.GetCompanyAsync(id);
-            return Companies.FirstOrDefault(x => x.Id == id);
+            var companiesWithJobs = await _companyService.GetCompaniesWithJobopeningsAsync();
+            var company = companiesWithJobs.FirstOrDefault(x => x.Id == id);
+            if (company == null)
+            {
+                HttpContext.Response.StatusCode = 404; 
+            }
+            return await Task.FromResult<Company>(company);
         }
 
         [HttpPost]

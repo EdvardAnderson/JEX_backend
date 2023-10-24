@@ -1,4 +1,5 @@
 using System;
+using System.Text.Json.Serialization;
 
 namespace JEX_backend.Models;
 public class Company
@@ -7,7 +8,8 @@ public class Company
     public string? Name { get; set; }
     public string? Address { get; set; }
 
-    public List<JobOpening>? JobOpenings {get;set;}
+    
+    public List<JobOpening> JobOpenings { get; set; }
 
     public Company()
     {

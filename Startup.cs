@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 namespace JEX_backend;
 public class Startup
@@ -11,7 +12,11 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
-        services.AddControllers();
+        services.AddControllers()
+       .AddJsonOptions(options =>
+       {
+           options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+       });
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
 
@@ -20,22 +25,23 @@ public class Startup
             options.UseSqlServer(Configuration.GetConnectionString("JEXDbContext"));
         });
 
-        
+
         services.AddScoped<ICompanyService, CompanyService>();
 
-         services.AddCors(options =>
-    {
-        options.AddDefaultPolicy(builder =>
+        services.AddCors(options =>
         {
-            builder.WithOrigins("http://localhost:4200") // Angular endpoint allowed
-                   .AllowAnyHeader()
-                   .AllowAnyMethod();
+            options.AddPolicy("AllowLocalhost4200", builder =>
+            {
+                builder.WithOrigins("http://localhost:4200") // Angular endpoint allowed
+                       .AllowAnyHeader()
+                       .AllowAnyMethod();
+            });
         });
-    });
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
+        app.UseCors("AllowLocalhost4200");
         if (env.IsDevelopment())
         {
             app.UseSwagger();
@@ -44,26 +50,26 @@ public class Startup
         else
         {
             app.UseHsts();
-            //app.UseHttpsRedirection();
         }
 
         app.UseHttpsRedirection();
         // Other middleware configuration...
-        app.UseCors();
+
+
         app.UseRouting();
         app.UseAuthorization();
         app.UseEndpoints(ep =>
         {
             ep.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+                pattern: "{controller=Companies}/{action=Index}/{id?}");
 
-                ep.MapControllerRoute(
-                    name:"",
-                    pattern:"",
-                    defaults: new { controller = "", action=""}
+            ep.MapControllerRoute(
+                name: "",
+                pattern: "",
+                defaults: new { controller = "", action = "" }
 
-                );
+            );
         });
     }
 }
