@@ -34,15 +34,16 @@ namespace JEX_backend.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<Company> GetCompany(Guid id)
+        public async Task<CompanyDto> GetCompany(Guid id)
         {
-            var companiesWithJobs = await _companyService.GetCompaniesWithJobopeningsAsync();
-            var company = companiesWithJobs.FirstOrDefault(x => x.Id == id);
+            var companies = await _companyService.GetCompaniesAsync();
+            
+            var company = GetCustomizedCompanyDtoList(companies).FirstOrDefault(x => x.Id == id);
             if (company == null)
             {
                 HttpContext.Response.StatusCode = 404;
             }
-            return await Task.FromResult<Company>(company);
+            return await Task.FromResult<CompanyDto>(company);
         }
 
         [HttpPost]
@@ -67,6 +68,7 @@ namespace JEX_backend.Controllers
         }
 
         [HttpPut]
+        [Route("edit/{id}")]
         public async Task<Company> UpdateCompany([FromBody] Company company)
         {
             var updatedCompany = await _companyService.UpdateAsync(company.Id, company);

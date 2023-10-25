@@ -21,6 +21,7 @@ public class CompanyService : ICompanyService
             {
                 Id = company.Id,
                 Name = company.Name,
+                Address = company.Address,
                 JobOpenings = openings.ToList()
             }
         ).Where(company=>company.JobOpenings.Any());
@@ -40,6 +41,7 @@ public class CompanyService : ICompanyService
             {
                 Id = company.Id,
                 Name = company.Name,
+                Address = company.Address,
                 JobOpenings = openings.ToList()
             }
         );
