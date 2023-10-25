@@ -15,7 +15,10 @@ public class Startup
         services.AddControllers()
        .AddJsonOptions(options =>
        {
-           options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+           options.JsonSerializerOptions.PropertyNamingPolicy = null;
+           //options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+options.JsonSerializerOptions.Converters.Add(new CompanyDtoConverter());
+
        });
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();

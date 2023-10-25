@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "DcOxRU7Dc3g19VASPIUEDCEZlgon4abshoMeFNxEau00jHk0S2hpvYcaYWIxo796C+fnaJU4EEO3o312FXz4TA==",
+  "dgSpecHash": "gOtSkVvnAGhbxwNV0oMXLoIztlpBtMaQaeGLm87DSA7LIk87c5QvejyfGSFTEjpBECM9NaINhSE8iCT0gQckyQ==",
   "success": true,
   "projectFilePath": "C:\\Repos\\JEX\\JEX_backend\\JEX_backend.csproj",
   "expectedPackageFiles": [
@@ -120,7 +120,7 @@
     "C:\\Users\\Administrator\\.nuget\\packages\\microsoft.win32.systemevents\\6.0.0\\microsoft.win32.systemevents.6.0.0.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\mono.texttemplating\\2.2.1\\mono.texttemplating.2.2.1.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\netstandard.library\\1.6.1\\netstandard.library.1.6.1.nupkg.sha512",
-    "C:\\Users\\Administrator\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\nuget.common\\6.6.1\\nuget.common.6.6.1.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\nuget.configuration\\6.6.1\\nuget.configuration.6.6.1.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\nuget.dependencyresolver.core\\6.6.1\\nuget.dependencyresolver.core.6.6.1.nupkg.sha512",

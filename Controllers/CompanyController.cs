@@ -1,12 +1,13 @@
 using JEX_backend.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.DotNet.Scaffolding.Shared.Messaging;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace JEX_backend.Controllers
 {
-
     [ApiController]
     [Route("api/companies")]
+    [JsonConverter(typeof(NoValuesJsonConverter))]
     public class CompanyController : ControllerBase
     {
         private readonly JEXDbContext _context;
@@ -19,15 +20,67 @@ namespace JEX_backend.Controllers
         }
 
         [HttpGet("jobs")]
-        public async Task<ActionResult<List<Company>>> GetCompaniesWithhJobOpeningsAsync()
+        public async Task<ActionResult<List<CompanyDto>>> GetCompaniesWithhJobOpeningsAsync()
         {
-            return await _companyService.GetCompaniesWithJobopeningsAsync();
+            var companies = await _companyService.GetCompaniesWithJobopeningsAsync();
+
+            var companyDtos = companies
+                .Select(
+                    company =>
+                        new CompanyDto
+                        {
+                            Id = company.Id,
+                            Name = company.Name,
+                            Address = company.Address,
+                            JobOpenings = company.JobOpenings
+                                .Select(
+                                    job =>
+                                        new JobOpeningDto
+                                        {
+                                            Id = job.Id,
+                                            Title = job.Title,
+                                            Description = job.Description,
+                                            IsActive = job.IsActive
+                                        }
+                                )
+                                .ToList()
+                        }
+                )
+                .ToList();
+
+            return companyDtos;
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Company>>> GetCompaniesAsync()
+        public async Task<ActionResult<List<CompanyDto>>> GetCompaniesAsync()
         {
-            return await _companyService.GetCompaniesAsync();
+            var companies = await _companyService.GetCompaniesAsync();
+
+            var companyDtos = companies
+                .Select(
+                    company =>
+                        new CompanyDto
+                        {
+                            Id = company.Id,
+                            Name = company.Name,
+                            Address = company.Address,
+                            JobOpenings = company.JobOpenings
+                                .Select(
+                                    job =>
+                                        new JobOpeningDto
+                                        {
+                                            Id = job.Id,
+                                            Title = job.Title,
+                                            Description = job.Description,
+                                            IsActive = job.IsActive
+                                        }
+                                )
+                                .ToList()
+                        }
+                )
+                .ToList();
+
+            return companyDtos;
         }
 
         [HttpGet("{id}")]
@@ -37,7 +90,7 @@ namespace JEX_backend.Controllers
             var company = companiesWithJobs.FirstOrDefault(x => x.Id == id);
             if (company == null)
             {
-                HttpContext.Response.StatusCode = 404; 
+                HttpContext.Response.StatusCode = 404;
             }
             return await Task.FromResult<Company>(company);
         }
@@ -45,7 +98,10 @@ namespace JEX_backend.Controllers
         [HttpPost]
         public async Task CreateCompany([FromBody] Company company)
         {
-            if (string.IsNullOrWhiteSpace(company.Name) || string.IsNullOrWhiteSpace(company.Address))
+            if (
+                string.IsNullOrWhiteSpace(company.Name)
+                || string.IsNullOrWhiteSpace(company.Address)
+            )
             {
                 return;
             }

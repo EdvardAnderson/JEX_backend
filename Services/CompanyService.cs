@@ -30,7 +30,20 @@ public class CompanyService : ICompanyService
 
     public async Task<List<Company>> GetCompaniesAsync()
     {
-        return await _context.Companies.ToListAsync();
+        var jobOpenings = await _context.JobOpenings.ToListAsync();
+        var companies = await _context.Companies.ToListAsync();
+        var companiesWithJobOpenings = companies.GroupJoin(
+            jobOpenings,
+            company => company.Id, 
+            jobOpening => jobOpening.CompanyId, // FK
+            (company, openings) => new Company
+            {
+                Id = company.Id,
+                Name = company.Name,
+                JobOpenings = openings.ToList()
+            }
+        );
+        return  await Task.FromResult(companiesWithJobOpenings.ToList());
     }
 
 
@@ -75,7 +88,6 @@ public class CompanyService : ICompanyService
 
     public async Task<JobOpening> CreateJobOpeningAsync(JobOpening jobOpening)
     {
-
         // Update the properties of the existing entity
         var newJobOpening = new JobOpening
         {
