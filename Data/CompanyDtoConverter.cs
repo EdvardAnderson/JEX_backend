@@ -14,20 +14,20 @@ public class CompanyDtoConverter : JsonConverter<CompanyDto>
     {
         // Customize the serialization here.
         writer.WriteStartObject();
-        writer.WriteString("Id", value.Id.ToString());
-        writer.WriteString("Name", value.Name);
-        writer.WriteString("Address", value.Address);
-        writer.WriteStartArray("JobOpenings");
-        foreach (var job in value.JobOpenings)
-        {
-            writer.WriteStartObject();
-            writer.WriteString("Id", job.Id.ToString());
-            writer.WriteString("Title", job.Title);
-            writer.WriteString("Description", job.Description);
-            writer.WriteBoolean("IsActive", job.IsActive);
-            writer.WriteEndObject();
-        }
-        writer.WriteEndArray();
+            writer.WriteString("Id", value.Id.ToString());
+            writer.WriteString("Name", value.Name);
+            writer.WriteString("Address", value.Address);
+                writer.WriteStartArray("JobOpenings"); 
+                foreach (var job in value.JobOpenings)
+                {
+                    writer.WriteStartObject();
+                    writer.WriteString("Id", job.Id.ToString());
+                    writer.WriteString("Title", job.Title);
+                    writer.WriteString("Description", job.Description);
+                    writer.WriteBoolean("IsActive", job.IsActive);
+                    writer.WriteEndObject();
+                }
+                writer.WriteEndArray();
         writer.WriteEndObject();
     }
 }
