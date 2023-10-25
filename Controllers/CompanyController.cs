@@ -23,64 +23,14 @@ namespace JEX_backend.Controllers
         public async Task<ActionResult<List<CompanyDto>>> GetCompaniesWithhJobOpeningsAsync()
         {
             var companies = await _companyService.GetCompaniesWithJobopeningsAsync();
-
-            var companyDtos = companies
-                .Select(
-                    company =>
-                        new CompanyDto
-                        {
-                            Id = company.Id,
-                            Name = company.Name,
-                            Address = company.Address,
-                            JobOpenings = company.JobOpenings
-                                .Select(
-                                    job =>
-                                        new JobOpeningDto
-                                        {
-                                            Id = job.Id,
-                                            Title = job.Title,
-                                            Description = job.Description,
-                                            IsActive = job.IsActive
-                                        }
-                                )
-                                .ToList()
-                        }
-                )
-                .ToList();
-
-            return companyDtos;
+            return GetCustomizedCompanyDtoList(companies);
         }
 
         [HttpGet]
         public async Task<ActionResult<List<CompanyDto>>> GetCompaniesAsync()
         {
             var companies = await _companyService.GetCompaniesAsync();
-
-            var companyDtos = companies
-                .Select(
-                    company =>
-                        new CompanyDto
-                        {
-                            Id = company.Id,
-                            Name = company.Name,
-                            Address = company.Address,
-                            JobOpenings = company.JobOpenings
-                                .Select(
-                                    job =>
-                                        new JobOpeningDto
-                                        {
-                                            Id = job.Id,
-                                            Title = job.Title,
-                                            Description = job.Description,
-                                            IsActive = job.IsActive
-                                        }
-                                )
-                                .ToList()
-                        }
-                )
-                .ToList();
-
-            return companyDtos;
+            return GetCustomizedCompanyDtoList(companies);
         }
 
         [HttpGet("{id}")]
@@ -114,6 +64,37 @@ namespace JEX_backend.Controllers
         public async Task CreateJobOpening([FromBody] JobOpening jobOpening)
         {
             await _companyService.CreateJobOpeningAsync(jobOpening);
+        }
+
+
+        private List<CompanyDto> GetCustomizedCompanyDtoList(List<Company> companies)
+        {
+            if(companies == null) return new List<CompanyDto>();
+             var companyDtos = companies
+                .Select(
+                    company =>
+                        new CompanyDto
+                        {
+                            Id = company.Id,
+                            Name = company.Name,
+                            Address = company.Address,
+                            JobOpenings = company.JobOpenings
+                                .Select(
+                                    job =>
+                                        new JobOpeningDto
+                                        {
+                                            Id = job.Id,
+                                            Title = job.Title,
+                                            Description = job.Description,
+                                            IsActive = job.IsActive
+                                        }
+                                )
+                                .ToList()
+                        }
+                )
+                .ToList();
+
+            return companyDtos;
         }
     }
 }
