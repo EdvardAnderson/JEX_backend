@@ -66,6 +66,19 @@ namespace JEX_backend.Controllers
             await _companyService.CreateJobOpeningAsync(jobOpening);
         }
 
+        [HttpPut]
+        public async Task<Company> UpdateCompany([FromBody] Company company)
+        {
+            var updatedCompany = await _companyService.UpdateAsync(company.Id, company);
+            return await Task.FromResult(updatedCompany);
+        }
+
+
+        [HttpDelete("{id}")]
+        public async Task DeleteCompany(Guid id)
+        {
+            await _companyService.DeleteAsync(id);
+        }
 
         private List<CompanyDto> GetCustomizedCompanyDtoList(List<Company> companies)
         {
