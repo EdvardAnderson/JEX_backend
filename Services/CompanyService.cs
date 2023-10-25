@@ -1,3 +1,4 @@
+using System.Security.Cryptography.X509Certificates;
 using JEX_backend.Models;
 using Microsoft.EntityFrameworkCore;
 public class CompanyService : ICompanyService
@@ -102,5 +103,36 @@ public class CompanyService : ICompanyService
 
         await _context.SaveChangesAsync();
         return newJobOpening;
+    }
+
+    public async Task<JobOpening> UpdateJobOpeningAsync(Guid id, JobOpening jobOpening)
+    {
+         var existingJobOpening = await _context.JobOpenings.FindAsync(id);
+        if (existingJobOpening == null)
+        {
+            return null;
+        }
+
+        // Update the properties of the existing entity
+        _context.Entry(existingJobOpening).CurrentValues.SetValues(jobOpening);
+
+        await _context.SaveChangesAsync();
+        return existingJobOpening;
+    }
+
+    public async Task<bool> DeleteJobOpeningAsync(Guid id)
+    {
+         var jobopeningForDeletion = await _context.JobOpenings.FindAsync(id);
+        if (jobopeningForDeletion == null)
+            return false;
+
+        _context.JobOpenings.Remove(jobopeningForDeletion);
+        await _context.SaveChangesAsync();
+        return true;
+    }
+
+    public async Task<JobOpening> GetJobOpeningById(Guid id)
+    {
+        return await _context.JobOpenings.FirstOrDefaultAsync(x=>x.Id == id);
     }
 }

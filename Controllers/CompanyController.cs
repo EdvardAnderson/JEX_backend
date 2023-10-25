@@ -69,9 +69,9 @@ namespace JEX_backend.Controllers
 
         [HttpPut]
         [Route("edit/{id}")]
-        public async Task<Company> UpdateCompany([FromBody] Company company)
+        public async Task<Company> UpdateCompany(Guid id, [FromBody] Company company)
         {
-            var updatedCompany = await _companyService.UpdateAsync(company.Id, company);
+            var updatedCompany = await _companyService.UpdateAsync(id, company);
             return await Task.FromResult(updatedCompany);
         }
 
@@ -80,6 +80,31 @@ namespace JEX_backend.Controllers
         public async Task DeleteCompany(Guid id)
         {
             await _companyService.DeleteAsync(id);
+        }
+
+
+
+        [HttpGet]
+        [Route("jobs/{id}")]
+        public async Task<JobOpening> GetJobOpeningById(Guid id)
+        {
+            var jobOpening = await _companyService.GetJobOpeningById(id);
+            return await Task.FromResult(jobOpening);
+        }
+       
+        [HttpPut]
+        [Route("jobopenings/{id}")]
+        public async Task<JobOpening> UpdateJobOpening(Guid id, [FromBody] JobOpening jobOpening)
+        {
+            var updatedJobOpening = await _companyService.UpdateJobOpeningAsync(id, jobOpening);
+            return await Task.FromResult(updatedJobOpening);
+        }
+
+
+        [HttpDelete("jobopenings/{id}")]
+        public async Task DeleteJobOpening(Guid id)
+        {
+            await _companyService.DeleteJobOpeningAsync(id);
         }
 
         private List<CompanyDto> GetCustomizedCompanyDtoList(List<Company> companies)

@@ -43,4 +43,8 @@ public interface ICompanyService
     /// <param name="jobOpening"></param>
     /// <returns></returns>
     Task<JobOpening> CreateJobOpeningAsync(JobOpening jobOpening);
+    Task<JobOpening> UpdateJobOpeningAsync(Guid id, JobOpening jobOpening);
+    Task<bool> DeleteJobOpeningAsync(Guid id);
+
+    Task<JobOpening> GetJobOpeningById(Guid id);
 }
