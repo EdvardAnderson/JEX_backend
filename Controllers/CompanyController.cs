@@ -12,11 +12,13 @@ namespace JEX_backend.Controllers
     {
         private readonly JEXDbContext _context;
         private readonly ICompanyService _companyService;
+        private readonly ILogger<CompanyController> _logger;
 
-        public CompanyController(JEXDbContext context, ICompanyService companyService)
+        public CompanyController(JEXDbContext context, ICompanyService companyService, ILogger<CompanyController> logger)
         {
             _context = context;
             _companyService = companyService;
+            _logger = logger;
         }
 
         [HttpGet("jobs")]
@@ -37,7 +39,7 @@ namespace JEX_backend.Controllers
         public async Task<CompanyDto> GetCompany(Guid id)
         {
             var companies = await _companyService.GetCompaniesAsync();
-            
+
             var company = GetCustomizedCompanyDtoList(companies).FirstOrDefault(x => x.Id == id);
             if (company == null)
             {
@@ -58,6 +60,12 @@ namespace JEX_backend.Controllers
             }
 
             await _companyService.CreateCompanyAsync(company);
+            var path = HttpContext.Request.Path;
+            var method = HttpContext.Request.Method;
+
+            _logger.LogInformation("Request Path: {Path}", path);
+            _logger.LogInformation("Request Method: {Method}", method);
+            _logger.LogDebug($"Company was created: {JObject.FromObject(company)}");
         }
 
         [HttpPost]
@@ -65,6 +73,12 @@ namespace JEX_backend.Controllers
         public async Task CreateJobOpening([FromBody] JobOpening jobOpening)
         {
             await _companyService.CreateJobOpeningAsync(jobOpening);
+            var path = HttpContext.Request.Path;
+            var method = HttpContext.Request.Method;
+
+            _logger.LogInformation("Request Path: {Path}", path);
+            _logger.LogInformation("Request Method: {Method}", method);
+            _logger.LogDebug($"Jobopening was created: {JObject.FromObject(jobOpening)}");
         }
 
         [HttpPut]
@@ -91,7 +105,7 @@ namespace JEX_backend.Controllers
             var jobOpening = await _companyService.GetJobOpeningById(id);
             return await Task.FromResult(jobOpening);
         }
-       
+
         [HttpPut]
         [Route("jobopenings/{id}")]
         public async Task<JobOpening> UpdateJobOpening(Guid id, [FromBody] JobOpening jobOpening)
@@ -109,30 +123,30 @@ namespace JEX_backend.Controllers
 
         private List<CompanyDto> GetCustomizedCompanyDtoList(List<Company> companies)
         {
-            if(companies == null) return new List<CompanyDto>();
-             var companyDtos = companies
-                .Select(
-                    company =>
-                        new CompanyDto
-                        {
-                            Id = company.Id,
-                            Name = company.Name,
-                            Address = company.Address,
-                            JobOpenings = company.JobOpenings
-                                .Select(
-                                    job =>
-                                        new JobOpeningDto
-                                        {
-                                            Id = job.Id,
-                                            Title = job.Title,
-                                            Description = job.Description,
-                                            IsActive = job.IsActive
-                                        }
-                                )
-                                .ToList()
-                        }
-                )
-                .ToList();
+            if (companies == null) return new List<CompanyDto>();
+            var companyDtos = companies
+               .Select(
+                   company =>
+                       new CompanyDto
+                       {
+                           Id = company.Id,
+                           Name = company.Name,
+                           Address = company.Address,
+                           JobOpenings = company.JobOpenings
+                               .Select(
+                                   job =>
+                                       new JobOpeningDto
+                                       {
+                                           Id = job.Id,
+                                           Title = job.Title,
+                                           Description = job.Description,
+                                           IsActive = job.IsActive
+                                       }
+                               )
+                               .ToList()
+                       }
+               )
+               .ToList();
 
             return companyDtos;
         }

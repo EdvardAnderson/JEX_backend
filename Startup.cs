@@ -17,7 +17,7 @@ public class Startup
        {
            options.JsonSerializerOptions.PropertyNamingPolicy = null;
            //options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
-options.JsonSerializerOptions.Converters.Add(new CompanyDtoConverter());
+           options.JsonSerializerOptions.Converters.Add(new CompanyDtoConverter());
 
        });
         services.AddEndpointsApiExplorer();
@@ -67,12 +67,12 @@ options.JsonSerializerOptions.Converters.Add(new CompanyDtoConverter());
                 name: "default",
                 pattern: "{controller=Companies}/{action=Index}/{id?}");
 
-            ep.MapControllerRoute(
-                name: "",
-                pattern: "",
-                defaults: new { controller = "", action = "" }
+            // ep.MapControllerRoute(
+            //     name: "",
+            //     pattern: "",
+            //     defaults: new { controller = "", action = "" }
 
-            );
+            // );
         });
     }
 }

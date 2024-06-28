@@ -15,7 +15,13 @@ public class Program
     public static IHostBuilder CreateHostBuilder(string[] args)
     {
         return Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
+             .ConfigureLogging(logging =>
+        {
+            logging.ClearProviders();
+            logging.AddConsole();
+            logging.AddDebug();
+            // Voeg eventuele andere logproviders toe die je wilt gebruiken
+        }).ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseKestrel()
                         .UseUrls("https://localhost:7066/")
