@@ -1,9 +1,8 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace JEX_backend.Migrations
+namespace JEX_backend.API.Migrations
 {
     /// <inheritdoc />
     public partial class UpdateGuidId : Migration
@@ -18,7 +17,8 @@ namespace JEX_backend.Migrations
                 nullable: false,
                 defaultValueSql: "NEWID()",
                 oldClrType: typeof(Guid),
-                oldType: "uniqueidentifier");
+                oldType: "uniqueidentifier"
+            );
 
             migrationBuilder.AlterColumn<Guid>(
                 name: "Id",
@@ -27,7 +27,8 @@ namespace JEX_backend.Migrations
                 nullable: false,
                 defaultValueSql: "NEWID()",
                 oldClrType: typeof(Guid),
-                oldType: "uniqueidentifier");
+                oldType: "uniqueidentifier"
+            );
         }
 
         /// <inheritdoc />
@@ -40,7 +41,8 @@ namespace JEX_backend.Migrations
                 nullable: false,
                 oldClrType: typeof(Guid),
                 oldType: "uniqueidentifier",
-                oldDefaultValueSql: "NEWID()");
+                oldDefaultValueSql: "NEWID()"
+            );
 
             migrationBuilder.AlterColumn<Guid>(
                 name: "Id",
@@ -49,7 +51,8 @@ namespace JEX_backend.Migrations
                 nullable: false,
                 oldClrType: typeof(Guid),
                 oldType: "uniqueidentifier",
-                oldDefaultValueSql: "NEWID()");
+                oldDefaultValueSql: "NEWID()"
+            );
         }
     }
 }

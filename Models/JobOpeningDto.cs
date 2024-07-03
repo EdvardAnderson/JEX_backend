@@ -1,3 +1,5 @@
+namespace JEX_backend.API.Models;
+
 public class JobOpeningDto
 {
     public Guid Id { get; set; }

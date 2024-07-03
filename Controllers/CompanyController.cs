@@ -1,24 +1,73 @@
-using JEX_backend.Models;
+using AutoMapper;
+using JEX_backend.API.Models;
+using JEX_backend.API.Services;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
-namespace JEX_backend.Controllers
+namespace JEX_backend.API.Controllers
 {
     [ApiController]
     [Route("api/companies")]
     [JsonConverter(typeof(NoValuesJsonConverter))]
     public class CompanyController : ControllerBase
     {
-        private readonly JEXDbContext _context;
         private readonly ICompanyService _companyService;
+        private readonly IJobBoardRepository _repository;
+        private readonly IMapper _mapper;
 
-        public CompanyController(JEXDbContext context, ICompanyService companyService)
+        public CompanyController(
+            ICompanyService companyService,
+            IJobBoardRepository repository,
+            IMapper mapper
+        )
         {
-            _context = context;
-            _companyService = companyService;
+            _companyService =
+                companyService ?? throw new ArgumentNullException(nameof(companyService));
+            _repository = repository ?? throw new ArgumentNullException(nameof(repository));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
+        [HttpGet]
+        public async Task<
+            ActionResult<IEnumerable<CompanyWithoutJobOpeningsDto>>
+        > GetCompaniesAsync()
+        {
+            var companyEntities = await _repository.GetCompaniesAsync();
+            //this will be replaced by automapper
+            // var results = new List<CompanyWithoutJobOpeningsDto>();
+
+            // foreach (var company in companyEntities)
+            // {
+            //     results.Add(
+            //         new CompanyWithoutJobOpeningsDto
+            //         {
+            //             Id = company.Id,
+            //             Name = company.Name,
+            //             Address = company.Address
+            //         }
+            //     );
+            // }
+            return Ok(_mapper.Map<IEnumerable<CompanyWithoutJobOpeningsDto>>(companyEntities));
+        }
+
+        [HttpGet("{companyId}")]
+        public async Task<ActionResult> GetCompanyAsync(
+            Guid companyId,
+            bool includeJobOpenings = false
+        )
+        {
+            var company = await _repository.GetCompanyAsync(companyId, includeJobOpenings);
+            if (company == null)
+            {
+                return NotFound();
+            }
+
+            return includeJobOpenings
+                ? Ok(_mapper.Map<CompanyDto>(company))
+                : Ok(_mapper.Map<CompanyWithoutJobOpeningsDto>(company));
+        }
+
+        /*
         [HttpGet("jobs")]
         public async Task<ActionResult<List<CompanyDto>>> GetCompaniesWithhJobOpeningsAsync()
         {
@@ -37,7 +86,7 @@ namespace JEX_backend.Controllers
         public async Task<CompanyDto> GetCompany(Guid id)
         {
             var companies = await _companyService.GetCompaniesAsync();
-            
+
             var company = GetCustomizedCompanyDtoList(companies).FirstOrDefault(x => x.Id == id);
             if (company == null)
             {
@@ -75,14 +124,11 @@ namespace JEX_backend.Controllers
             return await Task.FromResult(updatedCompany);
         }
 
-
         [HttpDelete("{id}")]
         public async Task DeleteCompany(Guid id)
         {
             await _companyService.DeleteAsync(id);
         }
-
-
 
         [HttpGet]
         [Route("jobs/{id}")]
@@ -91,7 +137,7 @@ namespace JEX_backend.Controllers
             var jobOpening = await _companyService.GetJobOpeningById(id);
             return await Task.FromResult(jobOpening);
         }
-       
+
         [HttpPut]
         [Route("jobopenings/{id}")]
         public async Task<JobOpening> UpdateJobOpening(Guid id, [FromBody] JobOpening jobOpening)
@@ -99,7 +145,6 @@ namespace JEX_backend.Controllers
             var updatedJobOpening = await _companyService.UpdateJobOpeningAsync(id, jobOpening);
             return await Task.FromResult(updatedJobOpening);
         }
-
 
         [HttpDelete("jobopenings/{id}")]
         public async Task DeleteJobOpening(Guid id)
@@ -109,8 +154,9 @@ namespace JEX_backend.Controllers
 
         private List<CompanyDto> GetCustomizedCompanyDtoList(List<Company> companies)
         {
-            if(companies == null) return new List<CompanyDto>();
-             var companyDtos = companies
+            if (companies == null)
+                return new List<CompanyDto>();
+            var companyDtos = companies
                 .Select(
                     company =>
                         new CompanyDto
@@ -136,5 +182,6 @@ namespace JEX_backend.Controllers
 
             return companyDtos;
         }
+    }*/
     }
 }

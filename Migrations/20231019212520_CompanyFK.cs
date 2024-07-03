@@ -1,9 +1,8 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace JEX_backend.Migrations
+namespace JEX_backend.API.Migrations
 {
     /// <inheritdoc />
     public partial class CompanyFK : Migration
@@ -13,7 +12,8 @@ namespace JEX_backend.Migrations
         {
             migrationBuilder.DropForeignKey(
                 name: "FK_JobOpenings_Companies_CompanyId",
-                table: "JobOpenings");
+                table: "JobOpenings"
+            );
 
             migrationBuilder.AlterColumn<Guid>(
                 name: "CompanyId",
@@ -23,7 +23,8 @@ namespace JEX_backend.Migrations
                 defaultValue: new Guid("00000000-0000-0000-0000-000000000000"),
                 oldClrType: typeof(Guid),
                 oldType: "uniqueidentifier",
-                oldNullable: true);
+                oldNullable: true
+            );
 
             migrationBuilder.AddForeignKey(
                 name: "FK_JobOpenings_Companies_CompanyId",
@@ -31,7 +32,8 @@ namespace JEX_backend.Migrations
                 column: "CompanyId",
                 principalTable: "Companies",
                 principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                onDelete: ReferentialAction.Cascade
+            );
         }
 
         /// <inheritdoc />
@@ -39,7 +41,8 @@ namespace JEX_backend.Migrations
         {
             migrationBuilder.DropForeignKey(
                 name: "FK_JobOpenings_Companies_CompanyId",
-                table: "JobOpenings");
+                table: "JobOpenings"
+            );
 
             migrationBuilder.AlterColumn<Guid>(
                 name: "CompanyId",
@@ -47,14 +50,16 @@ namespace JEX_backend.Migrations
                 type: "uniqueidentifier",
                 nullable: true,
                 oldClrType: typeof(Guid),
-                oldType: "uniqueidentifier");
+                oldType: "uniqueidentifier"
+            );
 
             migrationBuilder.AddForeignKey(
                 name: "FK_JobOpenings_Companies_CompanyId",
                 table: "JobOpenings",
                 column: "CompanyId",
                 principalTable: "Companies",
-                principalColumn: "Id");
+                principalColumn: "Id"
+            );
         }
     }
 }

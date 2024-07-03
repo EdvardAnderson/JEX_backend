@@ -1,4 +1,7 @@
-using JEX_backend.Models;
+using JEX_backend.API.Entities;
+
+namespace JEX_backend.API.Services
+{
 public interface ICompanyService
 {
     Task<List<Company>> GetCompaniesWithJobopeningsAsync();
@@ -47,4 +50,5 @@ public interface ICompanyService
     Task<bool> DeleteJobOpeningAsync(Guid id);
 
     Task<JobOpening> GetJobOpeningById(Guid id);
+}
 }

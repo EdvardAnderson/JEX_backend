@@ -1,6 +1,9 @@
-using System.Text.Json.Serialization;
+using JEX_backend.API.Data;
+using JEX_backend.API.Services;
 using Microsoft.EntityFrameworkCore;
+
 namespace JEX_backend;
+
 public class Startup
 {
     public IConfiguration Configuration { get; }
@@ -12,14 +15,14 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
-        services.AddControllers()
-       .AddJsonOptions(options =>
-       {
-           options.JsonSerializerOptions.PropertyNamingPolicy = null;
-           //options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
-options.JsonSerializerOptions.Converters.Add(new CompanyDtoConverter());
-
-       });
+        services
+            .AddControllers()
+            .AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.PropertyNamingPolicy = null;
+                //options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+                options.JsonSerializerOptions.Converters.Add(new CompanyDtoConverter());
+            });
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
 
@@ -28,17 +31,24 @@ options.JsonSerializerOptions.Converters.Add(new CompanyDtoConverter());
             options.UseSqlServer(Configuration.GetConnectionString("JEXDbContext"));
         });
 
-
         services.AddScoped<ICompanyService, CompanyService>();
+        services.AddScoped<IJobOpeningService, JobOpeningService>();
+        services.AddScoped<IJobBoardRepository, JobBoardRepository>();
+
+        services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
         services.AddCors(options =>
         {
-            options.AddPolicy("AllowLocalhost4200", builder =>
-            {
-                builder.WithOrigins("http://localhost:4200") // Angular endpoint allowed
-                       .AllowAnyHeader()
-                       .AllowAnyMethod();
-            });
+            options.AddPolicy(
+                "AllowLocalhost4200",
+                builder =>
+                {
+                    builder
+                        .WithOrigins("http://localhost:4200") // Angular endpoint allowed
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                }
+            );
         });
     }
 
@@ -65,13 +75,13 @@ options.JsonSerializerOptions.Converters.Add(new CompanyDtoConverter());
         {
             ep.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Companies}/{action=Index}/{id?}");
+                pattern: "{controller=Companies}/{action=Index}/{id?}"
+            );
 
             ep.MapControllerRoute(
                 name: "",
                 pattern: "",
                 defaults: new { controller = "", action = "" }
-
             );
         });
     }
