@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("JEX_backend")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+57603fae2b31a8ee12efcf6c3c09e4a5a3e240f8")]
 [assembly: System.Reflection.AssemblyProductAttribute("JEX_backend")]
 [assembly: System.Reflection.AssemblyTitleAttribute("JEX_backend")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

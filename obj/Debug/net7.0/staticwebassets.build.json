@@ -1,8 +1,8 @@
 {
   "Version": 1,
-  "Hash": "KFl02M/jfA1Kk0vWWOsQftl4i8tFTbvYlK/j2VEFKyU=",
-  "Source": "JEX_backend",
-  "BasePath": "_content/JEX_backend",
+  "Hash": "FiBqy/xHR9Hn5ESTrbxvWad2TjsDGLYru0f2Pt4Z4cQ=",
+  "Source": "JEX_backend.API",
+  "BasePath": "_content/JEX_backend.API",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],
