@@ -11743,19 +11743,27 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Administrator\\.nuget\\packages\\": {}
+    "/Users/edvardanderson/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
+<<<<<<< HEAD
       "projectUniqueName": "C:\\Repos\\JEX\\JEX_backend\\JEX_backend.API.csproj",
       "projectName": "JEX_backend.API",
       "projectPath": "C:\\Repos\\JEX\\JEX_backend\\JEX_backend.API.csproj",
       "packagesPath": "C:\\Users\\Administrator\\.nuget\\packages\\",
       "outputPath": "C:\\Repos\\JEX\\JEX_backend\\obj\\",
+=======
+      "projectUniqueName": "/Users/edvardanderson/Ontwikkelen/JEX/JEX_backend/JEX_backend.csproj",
+      "projectName": "JEX_backend",
+      "projectPath": "/Users/edvardanderson/Ontwikkelen/JEX/JEX_backend/JEX_backend.csproj",
+      "packagesPath": "/Users/edvardanderson/.nuget/packages/",
+      "outputPath": "/Users/edvardanderson/Ontwikkelen/JEX/JEX_backend/obj/",
+>>>>>>> 15277ebff5616916caf26a3f0ee5a8397d61200b
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\Administrator\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "/Users/edvardanderson/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net7.0"
@@ -11843,6 +11851,7 @@
         "downloadDependencies": [
           {
             "name": "Microsoft.AspNetCore.App.Ref",
+<<<<<<< HEAD
             "version": "[7.0.20, 7.0.20]"
           },
           {
@@ -11856,6 +11865,17 @@
           {
             "name": "Microsoft.WindowsDesktop.App.Ref",
             "version": "[7.0.20, 7.0.20]"
+=======
+            "version": "[7.0.19, 7.0.19]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Host.osx-arm64",
+            "version": "[7.0.19, 7.0.19]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Ref",
+            "version": "[7.0.19, 7.0.19]"
+>>>>>>> 15277ebff5616916caf26a3f0ee5a8397d61200b
           }
         ],
         "frameworkReferences": {
@@ -11866,7 +11886,11 @@
             "privateAssets": "all"
           }
         },
+<<<<<<< HEAD
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.302\\RuntimeIdentifierGraph.json"
+=======
+        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.300/RuntimeIdentifierGraph.json"
+>>>>>>> 15277ebff5616916caf26a3f0ee5a8397d61200b
       }
     }
   }

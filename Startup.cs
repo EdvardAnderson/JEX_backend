@@ -77,12 +77,6 @@ public class Startup
                 name: "default",
                 pattern: "{controller=Companies}/{action=Index}/{id?}"
             );
-
-            ep.MapControllerRoute(
-                name: "",
-                pattern: "",
-                defaults: new { controller = "", action = "" }
-            );
         });
     }
 }

@@ -12,19 +12,22 @@ namespace JEX_backend.API.Controllers
     public class CompanyController : ControllerBase
     {
         private readonly ICompanyService _companyService;
+        private readonly ILogger<CompanyController> _logger;
         private readonly IJobBoardRepository _repository;
         private readonly IMapper _mapper;
 
         public CompanyController(
             ICompanyService companyService,
             IJobBoardRepository repository,
-            IMapper mapper
+            IMapper mapper,
+            ILogger<CompanyController> logger
         )
         {
             _companyService =
                 companyService ?? throw new ArgumentNullException(nameof(companyService));
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         [HttpGet]
@@ -107,6 +110,12 @@ namespace JEX_backend.API.Controllers
             }
 
             await _companyService.CreateCompanyAsync(company);
+            var path = HttpContext.Request.Path;
+            var method = HttpContext.Request.Method;
+
+            _logger.LogInformation("Request Path: {Path}", path);
+            _logger.LogInformation("Request Method: {Method}", method);
+            _logger.LogDebug($"Company was created: {JObject.FromObject(company)}");
         }
 
         [HttpPost]
@@ -114,6 +123,12 @@ namespace JEX_backend.API.Controllers
         public async Task CreateJobOpening([FromBody] JobOpening jobOpening)
         {
             await _companyService.CreateJobOpeningAsync(jobOpening);
+            var path = HttpContext.Request.Path;
+            var method = HttpContext.Request.Method;
+
+            _logger.LogInformation("Request Path: {Path}", path);
+            _logger.LogInformation("Request Method: {Method}", method);
+            _logger.LogDebug($"Jobopening was created: {JObject.FromObject(jobOpening)}");
         }
 
         [HttpPut]
