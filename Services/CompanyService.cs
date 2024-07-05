@@ -114,7 +114,7 @@ namespace JEX_backend.API.Services
         {
             var existingJobOpening = await _context.JobOpenings.FindAsync(id);
             if (existingJobOpening == null)
-            {
+            {  
                 return null;
             }
 

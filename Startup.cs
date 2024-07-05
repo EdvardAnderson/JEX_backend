@@ -1,3 +1,4 @@
+using JEX_backend.API;
 using JEX_backend.API.Data;
 using JEX_backend.API.Services;
 using Microsoft.EntityFrameworkCore;
@@ -19,9 +20,9 @@ public class Startup
             .AddControllers()
             .AddJsonOptions(options =>
             {
-                options.JsonSerializerOptions.PropertyNamingPolicy = null;
+                //options.JsonSerializerOptions.PropertyNamingPolicy = null;
                 //options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
-                options.JsonSerializerOptions.Converters.Add(new CompanyDtoConverter());
+                //options.JsonSerializerOptions.Converters.Add(new CompanyDtoConverter());
             });
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
@@ -33,7 +34,8 @@ public class Startup
 
         services.AddScoped<ICompanyService, CompanyService>();
         services.AddScoped<IJobOpeningService, JobOpeningService>();
-        services.AddScoped<IJobBoardRepository, JobBoardRepository>();
+        services.AddScoped<ICompanyRepository, CompanyRepository>();
+        services.AddScoped<IJobOpeningRepository, JobOpeningRepository>();
 
         services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

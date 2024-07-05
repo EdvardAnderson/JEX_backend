@@ -9,5 +9,10 @@ public class JobBoardProfiles : Profile
         CreateMap<Entities.Company, Models.CompanyWithoutJobOpeningsDto>();
         CreateMap<Entities.Company, Models.CompanyDto>();
         CreateMap<Entities.JobOpening, Models.JobOpeningDto>();
+        CreateMap<Entities.JobOpening, Models.JobOpeningForCreationDto>();
+
+        // for creation API calls
+        CreateMap<Models.JobOpeningForCreationDto, Entities.JobOpening>();
+        CreateMap<Models.CompanyForCreationDto, Entities.Company>();
     }
 }

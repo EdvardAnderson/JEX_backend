@@ -3,6 +3,7 @@ using JEX_backend.API.Models;
 using JEX_backend.API.Services;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace JEX_backend.API.Controllers
 {
@@ -11,49 +12,30 @@ namespace JEX_backend.API.Controllers
     [JsonConverter(typeof(NoValuesJsonConverter))]
     public class CompanyController : ControllerBase
     {
-        private readonly ICompanyService _companyService;
+        //private readonly ICompanyService _companyService;
         private readonly ILogger<CompanyController> _logger;
-        private readonly IJobBoardRepository _repository;
+        private readonly ICompanyRepository _repository;
         private readonly IMapper _mapper;
 
         public CompanyController(
-            ICompanyService companyService,
-            IJobBoardRepository repository,
+            ICompanyRepository repository,
             IMapper mapper,
             ILogger<CompanyController> logger
         )
         {
-            _companyService =
-                companyService ?? throw new ArgumentNullException(nameof(companyService));
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         [HttpGet]
-        public async Task<
-            ActionResult<IEnumerable<CompanyWithoutJobOpeningsDto>>
-        > GetCompaniesAsync()
+        public async Task<ActionResult<IEnumerable<CompanyDto>>> GetCompaniesAsync()
         {
             var companyEntities = await _repository.GetCompaniesAsync();
-            //this will be replaced by automapper
-            // var results = new List<CompanyWithoutJobOpeningsDto>();
-
-            // foreach (var company in companyEntities)
-            // {
-            //     results.Add(
-            //         new CompanyWithoutJobOpeningsDto
-            //         {
-            //             Id = company.Id,
-            //             Name = company.Name,
-            //             Address = company.Address
-            //         }
-            //     );
-            // }
-            return Ok(_mapper.Map<IEnumerable<CompanyWithoutJobOpeningsDto>>(companyEntities));
+            return Ok(_mapper.Map<IEnumerable<CompanyDto>>(companyEntities));
         }
 
-        [HttpGet("{companyId}")]
+        [HttpGet("{companyId}", Name = "GetCompanyAsync")]
         public async Task<ActionResult> GetCompanyAsync(
             Guid companyId,
             bool includeJobOpenings = false
@@ -68,6 +50,31 @@ namespace JEX_backend.API.Controllers
             return includeJobOpenings
                 ? Ok(_mapper.Map<CompanyDto>(company))
                 : Ok(_mapper.Map<CompanyWithoutJobOpeningsDto>(company));
+        }
+
+        [HttpPost(Name = "CreateCompany")]
+        public async Task<ActionResult> CreateCompany([FromBody] CompanyForCreationDto company)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var incoming = _mapper.Map<Entities.Company>(company);
+
+            await _repository.CreateCompanyAsync(incoming);
+            await _repository.SaveChangesAsync();
+
+            var path = HttpContext.Request.Path;
+            var method = HttpContext.Request.Method;
+
+            var companyCreated = _mapper.Map<CompanyDto>(incoming);
+            _logger.LogInformation("Request Path: {Path}", path);
+            _logger.LogInformation("Request Method: {Method}", method);
+            _logger.LogDebug($"Company was created: {JObject.FromObject(companyCreated)}");
+            return CreatedAtRoute(
+                nameof(GetCompanyAsync),
+                new { companyId = companyCreated.Id },
+                companyCreated
+            );
         }
 
         /*
